@@ -3,7 +3,9 @@
 A command line agent that takes a research topic or an arXiv paper, reads the paper, and gives you a structured briefing plus grounded answers to follow up questions.
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
-![License MIT](https://img.shields.io/badge/license-MIT-green)
+![Orchestration](https://img.shields.io/badge/orchestration-LangGraph-1c3c3c)
+![LLM](https://img.shields.io/badge/LLM-Groq-fb542b)
+![Vector DB](https://img.shields.io/badge/vector%20db-Chroma-6a4c93)
 
 ## What it does and why
 
@@ -171,10 +173,6 @@ Rate limits: Groq's free tier has per-minute and per-day token limits that vary 
 
 **Known limitations, stated honestly.** Section splitting can fail on papers with unusual formatting or two column layouts. PDF parsing was tested successfully on standard text based papers, a scanned or image only PDF would raise a clear error rather than crash, per the code, but this path wasn't manually exercised against a real scanned paper during testing. Single dense retrieval may occasionally miss exact-figure questions as noted above.
 
-## License
-
-MIT
-
 ## Table of Contents
 
 - [What it does and why](#what-it-does-and-why)
@@ -183,4 +181,3 @@ MIT
 - [Usage](#usage)
 - [Tech stack](#tech-stack)
 - [Design decisions and tradeoffs](#design-decisions-and-tradeoffs)
-- [License](#license)
