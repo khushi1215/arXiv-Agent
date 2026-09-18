@@ -1,4 +1,4 @@
-# arXiv Paper Digest & QA Agent - KNOWLEDGE.md
+# arXiv Paper Digest & QA Agent - KNOWLEDGE Log
 
 ## Project definition
 
