@@ -55,6 +55,44 @@ Two conditional branches exist in the graph. The first decides between the topic
 
 The QA loop happens outside the compiled graph. Once a briefing exists, the CLI calls the QA node as a plain function, once per question, reusing the same state. See the design decisions section for why.
 
+### Project structure
+
+```
+arxiv-agent/
+├── app.py                      # entry point, runs the CLI
+├── requirements.txt
+├── .env.example
+├── README.md
+├── KNOWLEDGE.md
+│
+├── src/
+│   ├── state.py                 # shared state schema
+│   ├── graph.py                  # builds the state graph, nodes and edges
+│   ├── cli.py                    # terminal input/output and formatting
+│   │
+│   ├── nodes/                    # one file per graph node
+│   │   ├── query_understanding.py
+│   │   ├── arxiv_retrieval.py
+│   │   ├── ranking.py
+│   │   ├── fetch_parse.py
+│   │   ├── chunk_embed.py
+│   │   ├── summarize.py
+│   │   └── qa.py
+│   │
+│   └── utils/                    # reusable helpers the nodes call into
+│       ├── arxiv_client.py       # wraps the official arXiv API
+│       ├── pdf_parser.py          # PyMuPDF text extraction
+│       ├── embeddings.py          # sentence-transformers wrapper
+│       ├── vector_store.py        # Chroma collection access
+│       ├── llm.py                 # Groq client
+│       └── text_clean.py          # cleans up stray unicode punctuation
+│
+└── data/
+    └── chroma_store/              # local vector db, created on first run
+```
+
+Each node in `src/nodes/` maps directly to a stage in the architecture diagram above, so it's easy to trace which file handles which part of the pipeline. Shared logic that more than one node needs, like calling the arXiv API or talking to Chroma, lives in `src/utils/` instead of being duplicated across nodes.
+
 ## Installation
 
 Requires Python 3.10 or later and a free Groq API key from [console.groq.com](https://console.groq.com).
@@ -172,12 +210,3 @@ Rate limits: Groq's free tier has per-minute and per-day token limits that vary 
 **What would change with more time.** Hybrid retrieval (embeddings plus keyword search) would likely improve QA on questions asking for exact figures. Section detection could use a more robust method than header name matching, possibly based on font size or layout position extracted directly from the PDF rather than plain text heuristics. Automated tests for each node, currently this was tested manually end to end rather than with a test suite, given the project time box.
 
 **Known limitations, stated honestly.** Section splitting can fail on papers with unusual formatting or two column layouts. PDF parsing was tested successfully on standard text based papers, a scanned or image only PDF would raise a clear error rather than crash, per the code, but this path wasn't manually exercised against a real scanned paper during testing. Single dense retrieval may occasionally miss exact-figure questions as noted above.
-
-## Table of Contents
-
-- [What it does and why](#what-it-does-and-why)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Tech stack](#tech-stack)
-- [Design decisions and tradeoffs](#design-decisions-and-tradeoffs)
