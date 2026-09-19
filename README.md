@@ -98,7 +98,7 @@ Each node in `src/nodes/` maps directly to a stage in the architecture diagram a
 Requires Python 3.10 or later and a free Groq API key from [console.groq.com](https://console.groq.com).
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/khushi1215/arXiv-Agent.git
 cd arxiv-agent
 python -m venv venv
 venv\Scripts\activate        # on Windows
